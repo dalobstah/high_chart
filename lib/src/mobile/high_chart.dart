@@ -9,13 +9,14 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 ///A Chart library based on [High Charts (.JS)](https://www.highcharts.com/)
 ///
 class HighCharts extends StatefulWidget {
-  const HighCharts(
-      {required this.data,
-      required this.size,
-      this.loader = const Center(child: CircularProgressIndicator()),
-      this.scripts = const [],
-      Key? key})
-      : super(key: key);
+  const HighCharts({
+    required this.data,
+    required this.size,
+    this.loader = const Center(child: CircularProgressIndicator()),
+    this.scripts = const [],
+    this.autoHeight = false,
+    Key? key,
+  }) : super(key: key);
 
   ///Custom `loader` widget, until script is loaded
   ///
@@ -70,6 +71,15 @@ class HighCharts extends StatefulWidget {
   ///```
   final Size size;
 
+  ///Automatic chart hight
+  ///
+  ///Overrides height set by [size] and automatically adjusts height based on content height
+  ///
+  ///```dart
+  ///bool autoHeight = false;
+  ///```
+  final bool autoHeight;
+
   ///Scripts to be loaded
   ///
   ///Url's of the hightchart js scripts.
@@ -105,6 +115,7 @@ class HighCharts extends StatefulWidget {
 
 class _HighChartsState extends State<HighCharts> {
   bool _isLoaded = false;
+  late double contentHeight = widget.size.height;
 
   late WebViewController _controller;
 
@@ -126,14 +137,12 @@ class _HighChartsState extends State<HighCharts> {
 
     if (_controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
-      (_controller.platform as AndroidWebViewController)
-          .setMediaPlaybackRequiresUserGesture(false);
+      (_controller.platform as AndroidWebViewController).setMediaPlaybackRequiresUserGesture(false);
       AndroidWebViewController.enableDebugging(kDebugMode);
     }
 
     if (_controller.platform is WebKitWebViewController) {
-      WebKitWebViewController webKitWebViewController =
-          _controller.platform as WebKitWebViewController;
+      WebKitWebViewController webKitWebViewController = _controller.platform as WebKitWebViewController;
       webKitWebViewController.setInspectable(kDebugMode);
     }
 
@@ -158,14 +167,22 @@ class _HighChartsState extends State<HighCharts> {
           }
           return NavigationDecision.navigate;
         })),
-      );
+      )
+      ..addJavaScriptChannel('OnHeightUpdate', onMessageReceived: (message) {
+        double height = double.tryParse(message.message) ?? 0;
+        height = height == 0 ? widget.size.height : height;
+
+        if (height != contentHeight && widget.autoHeight) {
+          setState(() {
+            contentHeight = height;
+          });
+        }
+      });
   }
 
   @override
   void didUpdateWidget(covariant HighCharts oldWidget) {
-    if (oldWidget.data != widget.data ||
-        oldWidget.size != widget.size ||
-        oldWidget.scripts != widget.scripts) {
+    if (oldWidget.data != widget.data || oldWidget.size != widget.size || oldWidget.scripts != widget.scripts) {
       _controller.loadHtmlString(_htmlContent());
     }
     super.didUpdateWidget(oldWidget);
@@ -179,18 +196,18 @@ class _HighChartsState extends State<HighCharts> {
       child: Stack(
         alignment: Alignment.center,
         fit: StackFit.expand,
-        children: [
-          !_isLoaded ? widget.loader : const SizedBox.shrink(),
-          WebViewWidget(controller: _controller)
-        ],
+        children: [!_isLoaded ? widget.loader : const SizedBox.shrink(), WebViewWidget(controller: _controller)],
       ),
     );
   }
 
   String _htmlContent() {
+    const observerJs =
+        'const resizeObserver=new ResizeObserver(entries=>{for(let entry of entries){OnHeightUpdate.postMessage(entry.contentRect.height.toString())}});resizeObserver.observe(document.body);';
+
     String html = "";
     html +=
-        '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/> </head> <body><div style="height:100%;width:100%;" id="highChartsDiv"></div><script>function senthilnasa(a){ eval(a); return true;}</script>';
+        '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/> </head> <body${widget.autoHeight ? ' style="overflow-y:hidden"' : ''}><div style="height:100%;width:100%;" id="highChartsDiv"></div><script>${observerJs}function senthilnasa(a){ eval(a); return true;}</script>';
     for (String src in widget.scripts) {
       html += '<script async="false" src="$src"></script>';
     }
@@ -204,8 +221,7 @@ class _HighChartsState extends State<HighCharts> {
       setState(() {
         _isLoaded = true;
       });
-      _controller.runJavaScriptReturningResult(
-          "senthilnasa(`Highcharts.chart('highChartsDiv',${widget.data} )`);");
+      _controller.runJavaScriptReturningResult("senthilnasa(`Highcharts.chart('highChartsDiv',${widget.data} )`);");
     }
   }
 }

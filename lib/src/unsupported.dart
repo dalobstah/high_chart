@@ -9,6 +9,7 @@ class HighCharts extends StatefulWidget {
       required this.size,
       this.loader = const CircularProgressIndicator(),
       this.scripts = const [],
+      this.autoHeight = false,
       Key? key})
       : super(key: key);
 
@@ -64,6 +65,15 @@ class HighCharts extends StatefulWidget {
   ///Size size = Size(400, 400);
   ///```
   final Size size;
+
+  ///Automatic chart hight
+  ///
+  ///Overrides height set by [size] and automatically adjusts height based on content height
+  ///
+  ///```dart
+  ///bool autoHeight = false;
+  ///```
+  final bool autoHeight;
 
   ///Scripts to be loaded
   ///
