@@ -1,17 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 ///
 ///A Chart library based on [High Charts (.JS)](https://www.highcharts.com/)
 ///
 class HighCharts extends StatefulWidget {
-  const HighCharts(
-      {required this.data,
-      required this.size,
-      this.loader = const CircularProgressIndicator(),
-      this.scripts = const [],
-      this.autoHeight = false,
-      Key? key})
-      : super(key: key);
+  const HighCharts({
+    required this.data,
+    required this.size,
+    this.loader = const CircularProgressIndicator(),
+    this.scripts = const [],
+    this.autoHeight = false,
+    super.key,
+  });
 
   ///Custom `loader` widget, until script is loaded
   ///
@@ -105,10 +107,14 @@ class HighCharts extends StatefulWidget {
   ///
   final List<String> scripts;
   @override
-  _HighChartsState createState() => _HighChartsState();
+  HighChartsState createState() => HighChartsState();
+
+  String? getPlatformVersion() {
+    return Platform.operatingSystemVersion;
+  }
 }
 
-class _HighChartsState extends State<HighCharts> {
+class HighChartsState extends State<HighCharts> {
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text("HighCharts: UnSupported Platform"));

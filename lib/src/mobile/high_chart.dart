@@ -15,8 +15,8 @@ class HighCharts extends StatefulWidget {
     this.loader = const Center(child: CircularProgressIndicator()),
     this.scripts = const [],
     this.autoHeight = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   ///Custom `loader` widget, until script is loaded
   ///
@@ -110,10 +110,10 @@ class HighCharts extends StatefulWidget {
   ///
   final List<String> scripts;
   @override
-  _HighChartsState createState() => _HighChartsState();
+  HighChartsState createState() => HighChartsState();
 }
 
-class _HighChartsState extends State<HighCharts> {
+class HighChartsState extends State<HighCharts> {
   bool _isLoaded = false;
   late double contentHeight = widget.size.height;
 
@@ -137,12 +137,14 @@ class _HighChartsState extends State<HighCharts> {
 
     if (_controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
-      (_controller.platform as AndroidWebViewController).setMediaPlaybackRequiresUserGesture(false);
+      (_controller.platform as AndroidWebViewController)
+          .setMediaPlaybackRequiresUserGesture(false);
       AndroidWebViewController.enableDebugging(kDebugMode);
     }
 
     if (_controller.platform is WebKitWebViewController) {
-      WebKitWebViewController webKitWebViewController = _controller.platform as WebKitWebViewController;
+      WebKitWebViewController webKitWebViewController =
+          _controller.platform as WebKitWebViewController;
       webKitWebViewController.setInspectable(kDebugMode);
     }
 
@@ -161,7 +163,7 @@ class _HighChartsState extends State<HighCharts> {
             try {
               launchUrlString(request.url);
             } catch (e) {
-              debugPrint('High Charts Error ->' + e.toString());
+              debugPrint('High Charts Error ->$e');
             }
             return NavigationDecision.prevent;
           }
@@ -182,7 +184,9 @@ class _HighChartsState extends State<HighCharts> {
 
   @override
   void didUpdateWidget(covariant HighCharts oldWidget) {
-    if (oldWidget.data != widget.data || oldWidget.size != widget.size || oldWidget.scripts != widget.scripts) {
+    if (oldWidget.data != widget.data ||
+        oldWidget.size != widget.size ||
+        oldWidget.scripts != widget.scripts) {
       _controller.loadHtmlString(_htmlContent());
     }
     super.didUpdateWidget(oldWidget);
@@ -196,7 +200,10 @@ class _HighChartsState extends State<HighCharts> {
       child: Stack(
         alignment: Alignment.center,
         fit: StackFit.expand,
-        children: [!_isLoaded ? widget.loader : const SizedBox.shrink(), WebViewWidget(controller: _controller)],
+        children: [
+          !_isLoaded ? widget.loader : const SizedBox.shrink(),
+          WebViewWidget(controller: _controller)
+        ],
       ),
     );
   }
@@ -221,7 +228,8 @@ class _HighChartsState extends State<HighCharts> {
       setState(() {
         _isLoaded = true;
       });
-      _controller.runJavaScriptReturningResult("senthilnasa(`Highcharts.chart('highChartsDiv',${widget.data} )`);");
+      _controller.runJavaScriptReturningResult(
+          "senthilnasa(`Highcharts.chart('highChartsDiv',${widget.data} )`);");
     }
   }
 }
