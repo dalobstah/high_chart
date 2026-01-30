@@ -1,6 +1,6 @@
-import 'dart:html' as html;
 import 'dart:math';
 import 'dart:ui' as ui;
+import 'package:web/web.dart' as html;
 
 import 'package:flutter/material.dart';
 
@@ -10,12 +10,7 @@ import 'js.dart';
 ///A Chart library based on [High Charts (.JS)](https://www.highcharts.com/)
 ///
 class HighCharts extends StatefulWidget {
-  const HighCharts(
-      {required this.data,
-      required this.size,
-      this.loader = const CircularProgressIndicator(),
-      this.scripts = const [],
-      super.key});
+  const HighCharts({required this.data, required this.size, this.loader = const CircularProgressIndicator(), this.scripts = const [], super.key});
 
   ///Custom `loader` widget, until script is loaded
   ///
@@ -104,15 +99,11 @@ class HighCharts extends StatefulWidget {
 }
 
 class HighChartsState extends State<HighCharts> {
-  final String _highChartsId =
-      "HighChartsId${Random().nextInt(900000) + 100000}";
+  final String _highChartsId = "HighChartsId${Random().nextInt(900000) + 100000}";
 
   @override
   void didUpdateWidget(covariant HighCharts oldWidget) {
-    if (oldWidget.data != widget.data ||
-        oldWidget.size != widget.size ||
-        oldWidget.scripts != widget.scripts ||
-        oldWidget.loader != widget.loader) {
+    if (oldWidget.data != widget.data || oldWidget.size != widget.size || oldWidget.scripts != widget.scripts || oldWidget.loader != widget.loader) {
       _load();
     }
     super.didUpdateWidget(oldWidget);
@@ -128,7 +119,7 @@ class HighChartsState extends State<HighCharts> {
   Widget build(BuildContext context) {
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(_highChartsId, (int viewId) {
-      final html.Element htmlElement = html.DivElement()
+      final html.Element htmlElement = html.HTMLDivElement()
         ..style.width = '100%'
         ..style.height = '100%'
         ..setAttribute("id", _highChartsId);
