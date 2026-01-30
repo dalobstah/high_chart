@@ -177,13 +177,14 @@ class HighChartsState extends State<HighCharts> {
     if (oldWidget.data != widget.data || oldWidget.size != widget.size || oldWidget.scripts != widget.scripts) {
       _controller.loadHtmlString(_htmlContent());
     }
+
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: widget.size.height,
+      height: contentHeight,
       width: widget.size.width,
       child: Stack(
         alignment: Alignment.center,

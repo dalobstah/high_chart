@@ -12,6 +12,7 @@ class HighCharts extends StatefulWidget {
     this.loader = const CircularProgressIndicator(),
     this.scripts = const [],
     this.autoHeight = false,
+    this.themeMode = ThemeMode.system, // Theme mode for the chart
     super.key,
   });
 
@@ -76,6 +77,14 @@ class HighCharts extends StatefulWidget {
   ///bool autoHeight = false;
   ///```
   final bool autoHeight;
+
+  /// Theme mode for the chart.
+  /// It can be set to `ThemeMode.system`, `ThemeMode.light`, or `ThemeMode.dark`.
+  /// ```dart
+  /// themeMode = ThemeMode.system,
+  /// ```
+  /// This property is used to set the theme of the chart.
+  final ThemeMode themeMode;
 
   ///Scripts to be loaded
   ///
