@@ -1,11 +1,10 @@
 <p align="center">
-<img src="https://i.ibb.co/GnKh9tp/kisspng-highsoft-highcharts-data-visualization-technology-crisp-5b0bc0d5cc2c53-729988461527496917836.jpg" />
-</p>
+<img src="https://raw.githubusercontent.com/senthilnasa/high_chart/master/img/high_chart_logo.jpg"></p>
 
 
 [![pub package](https://img.shields.io/pub/v/high_chart.svg?label=high_chart&color=blue)](https://pub.dev/packages/high_chart)
-[![popularity](https://badges.bar/high_chart/popularity)](https://pub.dev/packages/high_chart/score)
-[![pub points](https://badges.bar/high_chart/pub%20points)](https://pub.dev/packages/high_chart/score)
+[![popularity](https://img.shields.io/pub/popularity/high_chart?logo=dart)](https://pub.dev/packages/high_chart/score)
+[![pub points](https://img.shields.io/pub/points/high_chart?logo=dart)](https://pub.dev/packages/high_chart/score)
 ![building](https://github.com/senthilnasa/high_chart/workflows/build/badge.svg)
 
 

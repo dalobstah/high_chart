@@ -7,7 +7,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
 }
 
 class ExampleChart extends StatefulWidget {
-  const ExampleChart({Key? key}) : super(key: key);
+  const ExampleChart({super.key});
 
   @override
   ExampleChartState createState() => ExampleChartState();
@@ -97,18 +97,52 @@ class ExampleChartState extends State<ExampleChart> {
         centerTitle: true,
         title: const Text('High Charts Example App'),
       ),
-      body: HighCharts(
-        loader: const SizedBox(
-          width: 200,
-          child: LinearProgressIndicator(),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            HighCharts(
+              loader: const SizedBox(
+                width: 200,
+                child: LinearProgressIndicator(),
+              ),
+              size: const Size(700, 450),
+              data: _chartData,
+              networkScripts: const [
+                "https://code.highcharts.com/highcharts.js",
+                'https://code.highcharts.com/modules/networkgraph.js',
+                'https://code.highcharts.com/modules/exporting.js',
+              ],
+            ),
+            HighCharts(
+              loader: const SizedBox(
+                width: 200,
+                child: LinearProgressIndicator(),
+              ),
+              size: const Size(700, 450),
+              data: _chartData,
+              localScripts: const [
+                'res/highcharts.js',
+                'res/exporting.js',
+                'res/networkgraph.js',
+              ],
+            ),
+            HighCharts(
+              loader: const SizedBox(
+                width: 200,
+                child: LinearProgressIndicator(),
+              ),
+              size: const Size(700, 450),
+              data: _chartData,
+              localScripts: const [
+                'res/highcharts.js',
+                'res/exporting.js',
+                'res/networkgraph.js',
+              ],
+              themeMode: ThemeMode.light,
+            ),
+          ],
         ),
-        size: const Size(400, 400),
-        data: _chartData,
-        scripts: const [
-          "https://code.highcharts.com/highcharts.js",
-          'https://code.highcharts.com/modules/networkgraph.js',
-          'https://code.highcharts.com/modules/exporting.js',
-        ],
       ),
     );
   }
