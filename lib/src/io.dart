@@ -16,13 +16,12 @@ class HighCharts extends StatefulWidget {
   const HighCharts({
     required this.data, // Chart data in JSON format
     required this.size, // Size of the chart (height and width)
-    this.loader = const Center(
-        child:
-            CircularProgressIndicator()), // Loader widget while the chart loads
+    this.loader = const Center(child: CircularProgressIndicator()), // Loader widget while the chart loads
     this.networkScripts = const [], // Network-based JS scripts for High Charts
     this.localScripts = const [], // Local JS scripts for High Charts
     this.scripts = const [], // Deprecated: Combined list of JS scripts
     this.themeMode = ThemeMode.system, // Theme mode for the chart
+    this.autoHeight = false,
     super.key,
   });
 
@@ -52,6 +51,15 @@ class HighCharts extends StatefulWidget {
   /// Size chartSize = Size(400, 300);
   /// ```
   final Size size;
+
+  ///Automatic chart hight
+  ///
+  ///Overrides height set by [size] and automatically adjusts height based on content height
+  ///
+  ///```dart
+  ///bool autoHeight = false;
+  ///```
+  final bool autoHeight;
 
   /// List of URLs pointing to High Charts JavaScript files.
   ///
@@ -99,6 +107,7 @@ class HighChartsState extends State<HighCharts> {
         networkScripts: widget.networkScripts,
         localScripts: widget.localScripts,
         themeMode: widget.themeMode,
+        autoHeight: widget.autoHeight,
       );
     } else if (Platform.isWindows) {
       return windows.HighCharts(

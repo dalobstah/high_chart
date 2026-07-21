@@ -255,7 +255,7 @@ class HighChartsState extends State<HighCharts> {
 
       // Inject the chart data into the WebView
       _controller.runJavaScriptReturningResult(
-        "senthilnasa(`Highcharts.chart('highChartsDiv',${widget.data})`);",
+        "senthilnasa(`Highcharts.chart('highChartsDiv', ${widget.data})`);",
       );
     }
   }

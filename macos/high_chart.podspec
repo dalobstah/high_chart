@@ -14,7 +14,7 @@ A chart library based on High Charts (.JS), able to build advanced   charts like
   s.author           = { 'Your Company' => 'email@example.com' }
 
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'high_chart/Sources/high_chart/**/*.swift'
   s.dependency 'FlutterMacOS'
 
   s.platform = :osx, '10.11'
